@@ -24,6 +24,7 @@ def board_check():
     # And also doesn't proceed without a json.
         # a test to see if I can do list actions
         crash_test = boards_json[0]
+        crash_test = crash_test
     except:
         print("Error: didn't receive json correctly")
         return "Error: didn't receive json correctly", 404
@@ -32,9 +33,15 @@ def board_check():
     old_board = cc.Board(boards_json[0],"old")
     new_board = cc.Board(boards_json[1],"new")
 
-    print(f"old board: \n{old_board.getBoard()}")
-    print(f"new board: \n{new_board.getBoard()}")
-    return str(new_board.getColumn(2))
+    changes = cc.Board.change_detector(old_board,new_board)
+    if changes == False:
+        return "error: bad move", 404
+    
+    soldier = cc.Board.who_moved(old_board,new_board,changes)
+    if soldier == False:
+        return "error: bad move", 404
+    
+    return str(soldier)
 
 
 if __name__ == "__main__":

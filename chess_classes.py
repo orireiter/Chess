@@ -35,13 +35,146 @@ class Board:
         example = Board(["example"],"example")
         if type(old_board) != type(example) or type(new_board) != type(example):
             raise TypeError("At least one of the two arguments is not Board type")
-        elif old_board.getBoard() == new_board.getBoard:
+        elif old_board.getBoard() == new_board.getBoard():
             # in case boards are identical
-            return None
+            print("error: identical boards")
+            return False
+        else:
+            old_board = old_board.getBoard()
+            new_board = new_board.getBoard()
+            # assuming everything went well up to this part
+            # we'll first compare each row in both boards
+            rang1 = range(8)
+            different_rows = []
+            for row in rang1:
+                if old_board[row] != new_board[row]:
+                    different_rows.append(row)
+            
+            # after appending, the list should contain
+            # 1 or 2 rows, otherwise - it's an illegal move
+            if len(different_rows) < 0 or len(different_rows) > 2 :
+                print("error: bad move, too many rows changed")
+                return False
+            # when 1 row is different there should be 
+            # 2 cells that were changed in it
+            elif len(different_rows) == 1:
+                row_num = different_rows[0]
+                # assigning the rows into variables
+                old_row = old_board[row_num]
+                new_row = new_board[row_num]
+                
+                # running through the 2 rows looking for
+                # differences, should be exactly 2
+                different_cells = []
+                for cell in rang1:
+                    if old_row[cell] != new_row[cell]:
+                        different_cells.append(cell)
+                if len(different_cells) != 2 :
+                    print("error: bad move, not 2 cells were changed")
+                    return False
+                else:
+                    # returning a dict with key = row and 
+                    # value = the cells a that are different  
+                    return {f"{row_num}": different_cells}
+            elif len(different_rows) == 2:
+                # assigning te rows' nums
+                row_num1 = different_rows[0]
+                row_num2 = different_rows[1]  
 
-        
+                # there should be 1 change in each row
+                different_cells1 = []
+                different_cells2 = []
+                for cell1 in rang1:
+                    # applying a check to the 1st row given
+                    if old_board[row_num1][cell1] != new_board[row_num1][cell1]:
+                        different_cells1.append(cell1)
+                    # applying to the 2nd
+                    if old_board[row_num2][cell1] != new_board[row_num2][cell1]:
+                        different_cells2.append(cell1)
 
-        
+                if len(different_cells1) != 1  or  len(different_cells2) != 1 :
+                    print("error: bad move, an invalid amount of cells were changed")
+                    return False
+                else:
+                    return {f"{row_num1}": different_cells1,
+                            f"{row_num2}": different_cells2}        
+
+
+    @staticmethod
+    def who_moved(old_board, new_board, cells_dict):
+        # to check who moved, of the two cells changed,
+        # i'll which cell became 0 in the latest board
+        # this is the check when there was a change in only 1 row
+        if len(cells_dict) == 1:
+            row_num = list(cells_dict.keys())
+            row_num = int(row_num[0])
+            old_row = old_board.getRow(row_num)
+            new_row = new_board.getRow(row_num)
+
+            cell_nums = list(cells_dict.values())
+            print(cell_nums)
+            cell_num1 = cell_nums[0][0]
+            cell_num2 = cell_nums[0][1]
+            old_cell1 = old_row[cell_num1]
+            old_cell2 = old_row[cell_num2]
+
+            new_cell1 = new_row[cell_num1]
+            new_cell2 = new_row[cell_num2]
+
+            if old_cell1 != 0 and new_cell1 == 0:
+                if old_cell1 == new_cell2:
+                    return old_cell1, {"old": [row_num,cell_num1], "new": [row_num, cell_num2]}
+                else:
+                    print("error: problem recgonizing soldier moved")
+                    return False
+            elif old_cell2 != 0 and new_cell2 == 0:
+                if old_cell2 == new_cell1:
+                    return old_cell2, {"old": [row_num,cell_num2], "new": [row_num, cell_num1]}
+                else:
+                    print("error: problem recgonizing soldier moved"    )
+                    return False
+            else:
+                print("error: problem recgonizing soldier moved")
+                return False
+        elif len(cells_dict) == 2:
+            row_nums = list(cells_dict.keys())
+            row_num1 = int(row_nums[0])
+            row_num2 = int(row_nums[1])
+
+            old_row = old_board.getRow(row_num1)
+            new_row = new_board.getRow(row_num1)
+
+            old_cell1 = old_row[cells_dict[row_nums[0]][0]]
+            new_cell1 = new_row[cells_dict[row_nums[0]][0]]
+            print(old_cell1, new_cell1)
+            ########################################
+            
+            old_row = old_board.getRow(row_num2)
+            new_row = new_board.getRow(row_num2)
+
+            old_cell2 = old_row[cells_dict[row_nums[1]][0]]
+            new_cell2 = new_row[cells_dict[row_nums[1]][0]]
+            print(old_cell2, new_cell2)
+            #########################################
+
+            if old_cell1 != 0 and new_cell1 == 0:
+                if old_cell1 == new_cell2:
+                    return old_cell1, {
+                        "old": [row_num1,cells_dict[row_nums[0]][0]], 
+                        "new": [row_num2,cells_dict[row_nums[1]][0] ]}
+                else:
+                    print("error: problem recgonizing soldier moved")
+                    return False
+            elif old_cell2 != 0 and new_cell2 == 0:
+                if old_cell2 == new_cell1:
+                    return old_cell2, {
+                        "old": [row_num1,cells_dict[row_nums[1]][0]], 
+                        "new": [row_num2,cells_dict[row_nums[0]][0] ]}
+                else:
+                    print("error: problem recgonizing soldier moved")
+                    return False
+            
+
 
 class Color(Enum):
     Empty = 0
