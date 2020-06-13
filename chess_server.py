@@ -37,11 +37,14 @@ def board_check():
     if changes == False:
         return "error: bad move", 404
     
-    soldier = cc.Board.who_moved(old_board,new_board,changes)
-    if soldier == False:
+    soldier_val, cell_dict = cc.Board.who_moved(old_board,new_board,changes)
+    if soldier_val == False:
         return "error: bad move", 404
     
-    return str(soldier)
+    soldier = cc.Soldier(soldier_val, cell_dict["old"], cell_dict["new"])
+
+    print1 = str(soldier.Type.name) + "\n" + str(soldier.Color.name) + "\n" + str(soldier.old_cell) + "\n" + str(soldier.new_cell) 
+    return print1 
 
 
 if __name__ == "__main__":

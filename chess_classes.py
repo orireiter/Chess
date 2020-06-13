@@ -146,7 +146,7 @@ class Board:
 
             old_cell1 = old_row[cells_dict[row_nums[0]][0]]
             new_cell1 = new_row[cells_dict[row_nums[0]][0]]
-            print(old_cell1, new_cell1)
+            # print(old_cell1, new_cell1)
             ########################################
             
             old_row = old_board.getRow(row_num2)
@@ -154,7 +154,7 @@ class Board:
 
             old_cell2 = old_row[cells_dict[row_nums[1]][0]]
             new_cell2 = new_row[cells_dict[row_nums[1]][0]]
-            print(old_cell2, new_cell2)
+            # print(old_cell2, new_cell2)
             #########################################
 
             if old_cell1 != 0 and new_cell1 == 0:
@@ -194,7 +194,7 @@ class Soldier:
     # A soldier class is created to allow conversion from numeral
     # representation on the board, to a soldier and its properties
     # so we can validate its movement.
-    def __init__(self, value):
+    def __init__(self, value, old_cell, new_cell):
         # The value given is the numeral value on the cell on the board.
         # 1-6 -> white, 7-12 -> black and the type can be easily accessed 
         # through the class with the same name above.
@@ -212,4 +212,8 @@ class Soldier:
             self.Color = None
             self.Type = None
             print("ERROR initializing soldier class")
-        print(f"New soldier's characteristics: \nColor - {self.Color.name} \nType - {self.Type.name}")
+        
+        self.old_cell = old_cell
+        self.new_cell = new_cell
+        
+        print(f"New soldier's characteristics: \nColor - {self.Color.name} \nType - {self.Type.name} \nOld Cell - {self.old_cell} \nNew Cell - {self.new_cell}")
