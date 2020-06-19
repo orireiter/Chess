@@ -137,24 +137,29 @@ class Board:
                 print("error: problem recgonizing soldier moved")
                 return False
         elif len(cells_dict) == 2:
+            print(cells_dict)
             row_nums = list(cells_dict.keys())
             row_num1 = int(row_nums[0])
             row_num2 = int(row_nums[1])
 
             old_row = old_board.getRow(row_num1)
             new_row = new_board.getRow(row_num1)
-
-            old_cell1 = old_row[cells_dict[row_nums[0]][0]]
-            new_cell1 = new_row[cells_dict[row_nums[0]][0]]
-            # print(old_cell1, new_cell1)
+            
+            old_cell1 = old_row[cells_dict[str(row_num1)][0]]
+            new_cell1 = new_row[cells_dict[str(row_num1)][0]]
+            print(old_cell1)
+            print(new_cell1)
+            
             ########################################
             
             old_row = old_board.getRow(row_num2)
             new_row = new_board.getRow(row_num2)
 
-            old_cell2 = old_row[cells_dict[row_nums[1]][0]]
-            new_cell2 = new_row[cells_dict[row_nums[1]][0]]
-            # print(old_cell2, new_cell2)
+            old_cell2 = old_row[cells_dict[str(row_num2)][0]]
+            new_cell2 = new_row[cells_dict[str(row_num2)][0]]
+            print(old_cell2)
+            print(new_cell2)
+
             #########################################
 
             if old_cell1 != 0 and new_cell1 == 0:
@@ -168,8 +173,8 @@ class Board:
             elif old_cell2 != 0 and new_cell2 == 0:
                 if old_cell2 == new_cell1:
                     return old_cell2, {
-                        "old": [row_num1,cells_dict[row_nums[1]][0]], 
-                        "new": [row_num2,cells_dict[row_nums[0]][0] ]}
+                        "old": [row_num2,cells_dict[row_nums[1]][0]], 
+                        "new": [row_num1,cells_dict[row_nums[0]][0] ]}
                 else:
                     print("error: problem recgonizing soldier moved")
                     return False

@@ -37,7 +37,11 @@ def board_check():
     if changes == False:
         return "error: bad move", 404
     
-    soldier_val, cell_dict = cc.Board.who_moved(old_board,new_board,changes)
+    try:
+        soldier_val, cell_dict = cc.Board.who_moved(old_board,new_board,changes)
+    except TypeError:
+        return "error: bad move", 404
+        
     if soldier_val == False:
         return "error: bad move", 404
     
@@ -48,4 +52,4 @@ def board_check():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000)
+    app.run(debug=True, port=5000)
